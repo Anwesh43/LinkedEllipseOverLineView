@@ -197,4 +197,26 @@ class EllipseOverLineView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : EllipseOverLineView) {
+
+        private val animator : Animator = Animator(view)
+        private val eol : EllipseOverLine = EllipseOverLine(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            eol.draw(canvas, paint)
+            animator.animate {
+                eol.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            eol.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
