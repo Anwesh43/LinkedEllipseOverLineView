@@ -220,4 +220,13 @@ class EllipseOverLineView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : EllipseOverLineView {
+            val view : EllipseOverLineView = EllipseOverLineView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
