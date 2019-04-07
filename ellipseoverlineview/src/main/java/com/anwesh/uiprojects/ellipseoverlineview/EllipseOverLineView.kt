@@ -23,6 +23,7 @@ val foreColor : Int = Color.parseColor("#f44336")
 val backColor : Int = Color.parseColor("#BDBDBD")
 val parts : Int = 2
 val bFactor : Float = 2.8f
+val delay : Long = 20
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -33,8 +34,8 @@ fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b)
 fun Int.sf() : Float = 1f - 2 * this
 fun Int.sjf() : Float = (this % 2).sf()
 
-fun Canvas.drawEllipse(a : Float, b : Float, sc : Float, paint : Paint) {
-    drawArc(RectF(-a, -b, a, b), 0f, 180f * sc, false, paint)
+fun Canvas.drawEllipse(a : Float, b : Float, sc : Float, startDeg : Float, paint : Paint) {
+    drawArc(RectF(-a, -b, a, b), startDeg, 180f * sc, false, paint)
 }
 
 fun Paint.setStyle(minDimension : Float) {
@@ -57,13 +58,13 @@ fun Canvas.drawEOLNode(i : Int, scale : Float, paint : Paint) {
     translate(gap * (i + 1), h / 2)
     rotate(90f * sc2.divideScale(0, parts))
     save()
-    translate(0f, -y)
+    translate(-y, 0f)
     drawLine(-size, 0f, size, 0f, paint)
     restore()
     for (j in 0..(ellips - 1)) {
         save()
         scale(1f, j.sf())
-        drawEllipse(size, size / bFactor, sc1.divideScale(j, ellips), paint)
+        drawEllipse(size, size / bFactor, sc1.divideScale(j, ellips), 180f * (i % 2), paint)
         restore()
     }
     restore()
@@ -113,7 +114,7 @@ class EllipseOverLineView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(delay)
                     view.invalidate()
                 } catch(ex : Exception) {
 
