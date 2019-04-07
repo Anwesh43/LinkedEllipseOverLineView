@@ -51,11 +51,15 @@ fun Canvas.drawEOLNode(i : Int, scale : Float, paint : Paint) {
     val size : Float = gap / sizeFactor
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
+    val y : Float = (h / 2 + size) * sc2.divideScale(1, parts) * i.sjf()
     paint.setStyle(Math.min(w, h))
     save()
-    translate(gap * (i + 1), h / 2 - (h / 2 + size) * sc2.divideScale(1, parts) * i.sjf())
+    translate(gap * (i + 1), h / 2)
     rotate(90f * sc2.divideScale(0, parts))
+    save()
+    translate(0f, -y)
     drawLine(-size, 0f, size, 0f, paint)
+    restore()
     for (j in 0..(ellips - 1)) {
         save()
         scale(1f, j.sf())
